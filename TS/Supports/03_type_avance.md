@@ -63,6 +63,10 @@ interface GenericBox<T> {
 const box: GenericBox<string> = { content: "Hello" };
 ```
 
+### Exercice
+
+Créez une fonction bien typée qui tri par ordre croissant ou décroissant un tableau de numérique ou de string. 
+
 ## 3. **Interfaces et Types**
 
 Bien que `interface` et `type` soient souvent interchangeables, il existe des différences subtiles :
