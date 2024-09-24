@@ -65,7 +65,49 @@ const box: GenericBox<string> = { content: "Hello" };
 
 ### Exercice
 
-Créez une fonction bien typée qui tri par ordre croissant ou décroissant un tableau de numérique ou de string. 
+Créez une fonction **tri**, bien typée, qui trie par ordre croissant ou décroissant un tableau de numérique ou de string. 
+
+#### Correction
+
+```ts
+enum Order {
+    ASC,
+    DESC
+}
+
+type Data = number[] | string[]
+
+function tri(data: Data, order: Order = Order.ASC): Data | never {
+
+    // on test si la variable firstElem existe data[0] || undefined, si elle n'existe pas  data[0] JS exécute undefined
+    const firstElem: unknown = data[0] || undefined
+
+    if (typeof firstElem === 'undefined') throw new Error("Tableau vide")
+
+    if (typeof firstElem === 'string') {
+        data.sort()
+
+        return order === Order.DESC ? data.reverse() : data
+    }
+
+    data.sort((a, b) => a - b)
+
+    return order === Order.DESC ? data.reverse() : data
+}
+
+console.log(tri(["a", "c", "b"]))
+console.log(tri(["a", "c", "b"], Order.DESC))
+
+console.log(tri([1, 7, 5, 10, 8]))
+console.log(tri([1, 7, 5, 10, 8], Order.DESC))
+
+try {
+    // on capture l'exception 
+    console.log(tri([], Order.DESC))
+} catch (error) {
+    console.error("Error fetching data:");
+}
+```
 
 ## 3. **Interfaces et Types**
 
@@ -94,18 +136,7 @@ const myDog: Dog = {
 type StringOrNumber = string | number;
 ```
 
-## 4. **Types conditionnels**
-
-Les types conditionnels permettent de créer des types basés sur d'autres types.
-
-```typescript
-type IsString<T> = T extends string ? "Yes" : "No";
-
-type Test1 = IsString<string>; // "Yes"
-type Test2 = IsString<number>; // "No"
-```
-
-## 5. **Mapped Types**
+## 4. **Mapped Types**
 
 Les types mappés permettent de créer des nouveaux types basés sur des types existants.
 
@@ -115,10 +146,7 @@ type User = {
     age: number;
 };
 
-type ReadOnly<T> = {
-    readonly [K in keyof T]: T[K];
-};
-
+// ReadOnly est un type prédéfini dans TypeScript 
 type ReadOnlyUser = ReadOnly<User>;
 
 const user: ReadOnlyUser = {
@@ -129,7 +157,7 @@ const user: ReadOnlyUser = {
 // user.name = "Bob"; // Erreur : Cannot assign to 'name' because it is a read-only property
 ```
 
-## 6. **Types d'index**
+## 5. **Types d'index**
 
 Les types d'index vous permettent d'accéder aux propriétés d'un type.
 
@@ -144,7 +172,7 @@ type NameType = Person["name"]; // string
 
 Cela est utile lorsque vous voulez obtenir le type d'une propriété d'un objet.
 
-## 7. **Fonctions de type**
+## 6. **Fonctions de type**
 
 Vous pouvez définir des types pour les fonctions, ce qui vous permet de spécifier les types des paramètres et le type de retour.
 
@@ -154,7 +182,7 @@ type GreetFunction = (name: string) => string;
 const greet: GreetFunction = (name) => `Hello, ${name}!`;
 ```
 
-## 8. **Types avec `this`**
+## 7. **Types avec `this`**
 
 Les types avec `this` vous permettent de faire référence à l'instance actuelle d'une classe dans la déclaration de type.
 
@@ -183,23 +211,74 @@ const result = new Chainable(2)
     .value; // result vaut 20
 ```
 
-## 9. **Utilisation de `keyof`**
+## 8. Le type partial
 
-`keyof` est un opérateur qui permet de créer un type à partir des clés d'un objet.
+Le type `Partial` en TypeScript est un type utilitaire qui permet de rendre toutes les propriétés d'un type donné optionnelles. Cela signifie que vous pouvez créer un nouvel objet qui contient certaines, toutes, ou aucune des propriétés d'un type original sans être obligé de spécifier toutes les propriétés.
+
+
+### Utilisation
+
+Voici comment vous pouvez utiliser `Partial` :
+
+1. **Définir un type** :
+
+   ```typescript
+   interface User {
+       id: number;
+       name: string;
+       email: string;
+   }
+   ```
+
+2. **Créer un type partiel** :
+
+   ```typescript
+   type PartialUser = Partial<User>;
+   ```
+
+   `PartialUser` est un type qui peut avoir n'importe quelle combinaison de `id`, `name`, et `email`, ou même aucune de ces propriétés.
+
+3. **Utiliser le type partiel** :
+
+   ```typescript
+   const user1: PartialUser = {
+       id: 1
+   };
+
+   const user2: PartialUser = {
+       name: "Alice",
+       email: "alice@example.com"
+   };
+
+   const user3: PartialUser = {}; // valide aussi
+   ```
+
+### Avantages
+
+- **Flexibilité** : Vous permet de créer des objets sans avoir besoin de spécifier toutes les propriétés.
+- **Facilite les mises à jour** : Utile lors de la mise à jour partielle d'objets, comme lors de l'envoi de données à une API.
+
+### Exemples
+
+Voici quelques exemples supplémentaires d'utilisation :
+
+#### Exemple 1 : Mise à jour d'un utilisateur
 
 ```typescript
-type Person = {
-    name: string;
-    age: number;
-};
+function updateUser(id: number, userUpdates: PartialUser) {
+    // logique pour mettre à jour l'utilisateur
+}
 
-type PersonKeys = keyof Person; // "name" | "age"
+// Appel avec un objet partiel
+updateUser(1, { name: "Bob" });
 ```
 
-Cela peut être utile pour des fonctions génériques qui manipulent des objets.
+#### Exemple 2 : Création d'un objet
 
-### Conclusion
+```typescript
+const newUser: PartialUser = {
+    email: "charlie@example.com"
+};
+```
 
-Ces concepts avancés de TypeScript vous offrent une flexibilité et une puissance considérables pour créer des applications robustes et maintenables. En utilisant des types union, intersection, génériques et conditionnels, vous pouvez créer des systèmes de types très riches qui s'adaptent à vos besoins.
-
-Dans les prochaines sections, nous pourrions explorer des fonctionnalités supplémentaires, telles que les décorateurs, les classes et l'intégration de TypeScript avec des bibliothèques JavaScript existantes. Si vous avez des questions ou si vous souhaitez approfondir un sujet spécifique, n'hésitez pas à le faire savoir !
+En résumé, `Partial` est très utile pour créer des types flexibles dans vos applications TypeScript, surtout lors de la manipulation d'objets où toutes les propriétés ne sont pas toujours nécessaires.
