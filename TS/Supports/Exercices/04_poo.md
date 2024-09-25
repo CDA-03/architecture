@@ -14,7 +14,7 @@ Créez une classe `BankAccount` qui respecte les principes d'encapsulation.
 Créez une classe `Person` qui utilise un constructeur minimaliste pour initialiser ses propriétés.
 
 ### Instructions :
-1. La classe doit avoir deux propriétés publiques `name` et `age`.
+1. La classe doit avoir deux propriétés privées `name` et `age`.
 2. Implémentez une méthode `introduce()` qui renvoie une chaîne de caractères pour présenter la personne.
 3. Instanciez des objets de la classe et utilisez la méthode `introduce()` pour les afficher.
 
