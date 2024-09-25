@@ -29,6 +29,49 @@ console.log(account.getBalance()); // 100
 // account.balance; // Erreur : Propriété 'balance' est privée
 ```
 
+- Un exemple plus long
+
+```ts
+class BankAccount {
+    private balance: number = 0; // Propriété privée, inaccessible de l'extérieur
+    public amount : number = 100 ; // pp accessible de partout
+
+    protected name : String = "Alice";
+
+    deposit(amount: number) {
+        if (amount > 0) {
+            this.balance += amount;
+        }
+    }
+
+    getBalance() {
+        return this.balance;
+    }
+
+}
+
+const account = new BankAccount();
+account.deposit(100);
+console.log(account.getBalance()); // 100
+
+// account.balance  // impossible
+
+account.amount = -100
+
+
+class Amount extends BankAccount{
+
+    getName():String{
+        // console.log(this.balance) // on ne peut accéder aux pp private de la classe parente
+        return this.name 
+    }
+}
+
+const UserAmount = new Amount;
+
+console.log( UserAmount.getName() )
+```
+
 ## 2. **Constructeur minimaliste**
 
 Un **constructeur** doit être utilisé pour initialiser une instance de classe. Évitez de surcharger le constructeur avec trop de logique. La logique métier complexe doit être déléguée à d'autres méthodes.
@@ -48,6 +91,41 @@ class User {
 
 const user = new User("Alice", 30);
 console.log(user.greet());
+```
+
+```ts
+
+// constructeur est minimaliste
+
+class User {
+    constructor(private name: string, private age: number) {
+        // Ne fait que l'initialisation
+
+    }
+    
+    greet() {
+        return `Hello, I am ${this.name}, ${this.age} years old.`;
+    }
+}
+
+const user = new User("Alice", 30);
+console.log(user.greet());
+
+
+class Model{
+    private table : string ;
+
+    constructor(table : string){
+        this.table = table ;
+    }
+
+    getTable():string{
+
+        return this.table ;
+    }
+}
+
+console.log( (new Model('table')).getTable() )
 ```
 
 ## 3. **Responsabilité unique (Single Responsibility Principle)**
