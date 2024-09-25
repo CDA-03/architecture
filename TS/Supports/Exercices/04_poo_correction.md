@@ -37,3 +37,28 @@ account.deposit(200);
 account.withdraw(50);
 console.log(account.getBalance()); // 150
 ```
+
+
+## **Exercice 2 : Créer des objets avec un constructeur minimaliste**
+Créez une classe `Person` qui utilise un constructeur minimaliste pour initialiser ses propriétés.
+
+### Instructions :
+1. La classe doit avoir deux propriétés privées `name` et `age`.
+2. Implémentez une méthode `introduce()` qui renvoie une chaîne de caractères pour présenter la personne.
+3. Instanciez des objets de la classe et utilisez la méthode `introduce()` pour les afficher.
+
+### Exemple attendu :
+```typescript
+class Person {
+    constructor(private name: string, private age: number) {}
+
+    introduce() {
+        return `Hi, my name is ${this.name} and I am ${this.age} years old.`;
+    }
+}
+
+const person1 = new Person("John", 25);
+console.log(person1.introduce()); // "Hi, my name is John and I am 25 years old."
+```
+
+---
