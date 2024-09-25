@@ -27,3 +27,4 @@ Créez une classe `Rectangle` qui suit le principe de responsabilité unique (Si
 1. Créez une classe `Rectangle` qui contient deux propriétés `width` et `height`.
 2. Ajoutez une méthode `getArea()` pour calculer la surface du rectangle.
 3. Créez une autre classe `Display` avec une méthode `printArea(rectangle: Rectangle)` pour afficher la surface du rectangle. Ne mélangez pas la logique de calcul et d'affichage.
+4. Créez également une classe Square en utilisant les principes vus en cours.
