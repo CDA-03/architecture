@@ -352,24 +352,6 @@ class Human implements Movable {
 }
 ```
 
-## 3. **Interfaces avec des propriétés optionnelles**
-
-Une interface peut contenir des **propriétés optionnelles** pour donner plus de flexibilité.
-
-**Principe** : Utilisez des propriétés optionnelles pour décrire des objets ayant des attributs facultatifs.
-
-```typescript
-interface Car {
-    make: string;
-    model: string;
-    year?: number; // Propriété optionnelle
-}
-
-const myCar: Car = {
-    make: "Toyota",
-    model: "Corolla"
-}; // Pas d'erreur, `year` est optionnelle
-```
 
 ---
 
