@@ -62,3 +62,40 @@ console.log(person1.introduce()); // "Hi, my name is John and I am 25 years old.
 ```
 
 ---
+
+
+## **Exercice 3 : Respect du principe de responsabilité unique**
+Créez une classe `Rectangle` qui suit le principe de responsabilité unique (Single Responsibility Principle).
+
+### Instructions :
+1. Créez une classe `Rectangle` qui contient deux propriétés `width` et `height`.
+2. Ajoutez une méthode `getArea()` pour calculer la surface du rectangle.
+3. Créez une autre classe `Display` avec une méthode `printArea(rectangle: Rectangle)` pour afficher la surface du rectangle. Ne mélangez pas la logique de calcul et d'affichage.
+
+### Exemple attendu :
+```typescript
+
+class Square extends Rectangle{
+    constructor(private width: number){
+        super(width, width)
+    }
+}
+
+class Rectangle {
+    constructor(private width: number, private height: number) {}
+
+    getArea() {
+        return this.width * this.height;
+    }
+}
+
+class Display {
+    printArea(rectangle: Rectangle) {
+        console.log(`The area of the rectangle is: ${rectangle.getArea()}`);
+    }
+}
+
+const rectangle = new Rectangle(5, 10);
+const display = new Display();
+display.printArea(rectangle); // "The area of the rectangle is: 50"
+```
