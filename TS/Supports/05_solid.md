@@ -6,7 +6,9 @@ Chaque classe doit avoir une **seule** responsabilité, c'est-à-dire une seule 
 
 Le principe de "Single Responsibility Principle" (SRP) stipule que chaque classe ou module doit avoir **une seule raison de changer**. Cela signifie que chaque classe devrait se concentrer sur **une seule fonctionnalité** ou **responsabilité**. Si une classe a plusieurs responsabilités, elle pourrait devoir être modifiée pour différentes raisons, ce qui rendrait le code plus difficile à maintenir.
 
-Prenons un exemple simple : imaginons une classe `UserService` qui gère à la fois l'authentification des utilisateurs et l'envoi d'e-mails de confirmation. Si l'entreprise décide de changer la façon dont les utilisateurs sont authentifiés (ajout d'une authentification à deux facteurs, par exemple), vous devrez modifier la classe. Si un autre changement survient, comme une nouvelle mise en forme des e-mails, vous devrez aussi modifier la même classe. Cela violerait le principe de responsabilité unique.
+Prenons un exemple simple : imaginons une classe `UserService` qui gère à la fois l'authentification des utilisateurs et l'envoi d'e-mails de confirmation. 
+
+Si l'entreprise décide de changer la façon dont les utilisateurs sont authentifiés (ajout d'une authentification à deux facteurs, par exemple), vous devrez modifier la classe. Si un autre changement survient, comme une nouvelle mise en forme des e-mails, vous devrez aussi modifier la même classe. Cela violerait le principe de responsabilité unique.
 
 Une meilleure approche serait d'avoir deux classes distinctes :
 - `AuthenticationService` : pour gérer l'authentification.
@@ -18,12 +20,33 @@ Ainsi, chaque classe n'aurait qu'une seule raison de changer :
 
 Cela rend le code plus modulaire, plus facile à maintenir et à tester.
 
-### Un autre exemple qui respecte ce principe SRP
+### Un exemple qui respecte ce principe SRP
 
 ```typescript
 class User {
-    constructor(public name: string, public email: string) {}
+    constructor(private _name: string, private _email: string) {}
+
+    // Getter pour le nom
+    get name(): string {
+        return this._name;
+    }
+
+    // Setter pour le nom
+    set name(value: string) {
+        this._name = value;
+    }
+
+    // Getter pour l'email
+    get email(): string {
+        return this._email;
+    }
+
+    // Setter pour l'email
+    set email(value: string) {
+        this._email = value;
+    }
 }
+
 
 class UserRepository {
     private users: User[] = [];
@@ -51,10 +74,12 @@ class UserService {
 }
 ```
 
+### Compléter les responsabilités ?? 
+
 Dans cet exemple, chaque classe a une responsabilité unique :
-- `User` gère les données d'un utilisateur.
-- `UserRepository` gère la persistance des utilisateurs.
-- `UserService` gère la logique métier liée aux utilisateurs.
+- `User` ??
+- `UserRepository` ??
+- `UserService` ?? 
 
 ---
 
@@ -62,7 +87,7 @@ Dans cet exemple, chaque classe a une responsabilité unique :
 
 Les classes doivent être **ouvertes à l'extension** mais **fermées à la modification**.
 
-### Bon Exemple :
+### Exemple :
 
 ```typescript
 // Classe de base
@@ -314,4 +339,3 @@ En suivant les principes SOLID dans TypeScript ou dans un langage utilisant le p
 - Vous obtenez un code plus modulaire et extensible.
 - Vous réduisez les risques d'erreurs lors des changements ou des ajouts de nouvelles fonctionnalités.
 - Vous facilitez la maintenance et la lisibilité du code.
-

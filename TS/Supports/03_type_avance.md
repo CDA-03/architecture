@@ -79,18 +79,13 @@ type Data = number[] | string[]
 
 function tri(data: Data, order: Order = Order.ASC): Data | never {
 
-    // on test si la variable firstElem existe data[0] || undefined, si elle n'existe pas  data[0] JS exécute undefined
-    const firstElem: unknown = data[0] || undefined
+    if (data.length === 0) throw new Error("Tableau vide")
 
-    if (typeof firstElem === 'undefined') throw new Error("Tableau vide")
-
-    if (typeof firstElem === 'string') {
+    if (typeof data[0] === 'string') {
         data.sort()
 
         return order === Order.DESC ? data.reverse() : data
     }
-
-    data.sort((a, b) => a - b)
 
     return order === Order.DESC ? data.reverse() : data
 }
@@ -107,6 +102,30 @@ try {
 } catch (error) {
     console.error("Error fetching data:");
 }
+```
+
+- Une meilleur version, beaucoup plus simple si on utilise une fonction de comparaison sur sort
+
+```ts
+// meilleur option 
+function genericSort<T>(data: T[], compareFn: (a: T, b: T) => number): T[] | never {
+
+    if (data.length === 0 ) throw new Error("Tableau vide")
+
+    const sortedData = data.sort(compareFn);
+
+    return sortedData;
+}
+
+// Croissant
+console.log(genericSort<String>(["a", "c", "b"], (a, b) => 1))
+console.log(genericSort<String>(["aaaaaa", "ccc", "bbbbbbbbbbbb"],  (a, b) => a.length - b.length ))
+console.log(genericSort<number>([1, 7, 5, 10, 8],  (a, b) => a - b))
+
+// Décroissant
+console.log(genericSort<String>(["a", "c", "b"], (a, b) => -1))
+console.log(genericSort<String>(["aaaaaa", "ccc", "bbbbbbbbbbbb"],  (a, b) => b.length - a.length ))
+console.log(genericSort<number>([1, 7, 5, 10, 8], (a, b) => b - a))
 ```
 
 ## 3. **Interfaces et Types**

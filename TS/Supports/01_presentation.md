@@ -108,11 +108,17 @@ npm run dev
 /
 ├── package.json
 ├── src
-│   ├── Model
-│   │   └── Duck.ts
 │   └── main.ts
 ├── tests
 │   ├── main.spec.ts
 │   └── duck.spec.ts
 └── tsconfig.json
+```
+
+## En ligne de commande
+
+Dans votre projet utiliser la commande suivante 
+
+```ts
+nodemon --watch './**/*.ts' --exec 'ts-node' src/Exercices/main.ts
 ```

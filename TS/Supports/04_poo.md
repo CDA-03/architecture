@@ -37,7 +37,7 @@ Un **constructeur** doit être utilisé pour initialiser une instance de classe.
 
 ```typescript
 class User {
-    constructor(public name: string, public age: number) {
+    constructor(private name: string, private age: number) {
         // Ne fait que l'initialisation
     }
     
@@ -86,28 +86,29 @@ Le **polymorphisme** permet à des classes dérivées de substituer leur propre 
 
 ```typescript
 class Animal {
-    makeSound(): void {
-        console.log("Some sound");
+    makeSound(): String {
+        return "Some sound";
     }
 }
 
 class Dog extends Animal {
-    makeSound(): void {
-        console.log("Woof!");
+    makeSound(): String {
+        return "Woof!";
     }
 }
 
 class Cat extends Animal {
-    makeSound(): void {
-        console.log("Meow!");
+    makeSound(): String {
+        return "Meow!";
     }
 }
 
-const animals: Animal[] = [new Dog(), new Cat()];
+export const animals: Animal[] = [new Dog(), new Cat()];
 
-animals.forEach(animal => animal.makeSound());
-// "Woof!"
-// "Meow!"
+for (const animal of animals) 
+    console.log(animal.makeSound())
+
+
 ```
 
 ---
@@ -118,7 +119,7 @@ L'**héritage** permet de créer des classes qui réutilisent, étendent ou modi
 
 ## 1. **Favoriser la composition plutôt que l'héritage**
 
-Bien que l'héritage soit une solution efficace pour réutiliser du code, il peut parfois mener à une forte dépendance entre classes. Préférez la **composition** (combiner des objets pour former une fonctionnalité) lorsque c’est possible, afin de rendre vos classes plus modulaires et réutilisables.
+Bien que l'héritage soit une solution efficace pour réutiliser du code, il peut parfois mener à une forte dépendance entre classes. Préférez la **composition** (combiner des objets pour former une fonctionnalité) lorsque c'est possible, afin de rendre vos classes plus modulaires et réutilisables.
 
 **Principe** : Utilisez l'héritage uniquement lorsqu'il y a une vraie relation parent-enfant.
 
@@ -155,13 +156,13 @@ Utilisez le modificateur **protected** pour protéger certaines méthodes de la 
 
 ```typescript
 class Vehicle {
-    protected move() {
+    protected move():void {
         console.log("Moving");
     }
 }
 
 class Bike extends Vehicle {
-    ride() {
+    ride():void {
         this.move(); // OK : `move` est accessible dans une sous-classe
     }
 }
@@ -290,9 +291,9 @@ console.log(employee1.getSalary()); // 5000
 
 ## 2. **Ne pas confondre interfaces et classes abstraites**
 
-Contrairement aux interfaces, les classes abstraites peuvent avoir des méthodes concrètes (implémentées) et des propriétés. Utilisez des interfaces pour définir uniquement des contrats, et des classes abstraites lorsqu’il y a un besoin d’héritage avec des méthodes partiellement implémentées.
+Contrairement aux interfaces, les classes abstraites peuvent avoir des méthodes concrètes (implémentées) et des propriétés. Utilisez des interfaces pour définir uniquement des contrats, et des classes abstraites lorsqu'il y a un besoin d'héritage avec des méthodes partiellement implémentées.
 
-**Principe** : Utilisez une interface lorsque vous n’avez pas besoin d’implément
+**Principe** : Utilisez une interface lorsque vous n'avez pas besoin d'implément
 
 ation, et une classe abstraite pour définir des comportements communs.
 .
