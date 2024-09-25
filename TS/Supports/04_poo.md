@@ -197,11 +197,55 @@ L'**héritage** permet de créer des classes qui réutilisent, étendent ou modi
 
 ## 1. **Favoriser la composition plutôt que l'héritage**
 
-Bien que l'héritage soit une solution efficace pour réutiliser du code, il peut parfois mener à une forte dépendance entre classes. Préférez la **composition** (combiner des objets pour former une fonctionnalité) lorsque c'est possible, afin de rendre vos classes plus modulaires et réutilisables.
+Bien que l'héritage soit une solution efficace pour réutiliser du code, il conduit à une forte dépendance entre classes. Préférez la **composition** (combiner des objets pour former une fonctionnalité) lorsque c'est possible, afin de rendre vos classes plus modulaires et réutilisables.
 
-**Principe** : Utilisez l'héritage uniquement lorsqu'il y a une vraie relation parent-enfant.
+**Principe** : Utilisez l'héritage uniquement lorsqu'il y a une vraie relation parent-enfant. Utilisez le principe suivant une classe enfant doit-être une sorte de, ou est un. Si vous avez une classe Product parente et deux classes Bike et Stylo qui extends de Product, ce principe marche, puisque Bike est un Product (de même Stylo est un Product ).
 
 ```typescript
+// Un Bike est un Produc
+class Product {
+    private price: number;
+    private name: string;
+    constructor(price: number, name: string) {
+        this.price = price;
+        this.name = name;
+    }
+
+    getName(): string { return this.name }
+    setName(name: string): void { this.name = name }
+
+    getPrice(): number { return this.price }
+    setPrice(price: number): void {
+        if (price > 0){ 
+            this.price = price ;
+        }   this.sendMail()
+    }
+
+    sendMail():void{
+
+        // send mail
+    }
+}
+
+class Bike extends Product {
+    private model: string;
+
+    constructor(model: string, name: string, price: number) {
+        super(price, name); // propre a JS on doit rappeler super lorsqu'on redéfinit des variables (ou propriétés) de classe
+        this.model = model
+    }
+
+    setModel(model: string): void {
+        this.model = model
+    }
+}
+
+const Brompton = new Bike('Brompton', 'model de base', 1500);
+
+console.log(Brompton.getName())
+console.log(Brompton.getPrice())
+
+// Un exemple composite
 class Engine {
     start() {
         console.log("Engine started");
