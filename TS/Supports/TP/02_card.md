@@ -11,7 +11,7 @@ L'objectif de cet exercice est de mettre en pratique les **principes SOLID** en 
 Vous devez créer trois principales entités :
 - `Product` (Produit) : Représente un article avec un nom et un prix.
 - `Cart` (Panier) : Contient les produits ajoutés par l'utilisateur.
-- `Storage` (Stockage) : Représente le mécanisme de persistance (local storage, base de données, etc.).
+- `StorageArray` (Stockage) : Représente le mécanisme de persistance (local storage, base de données, etc.).
 
 ### Contraintes :
 - Le système doit suivre les **principes SOLID**.
@@ -38,7 +38,7 @@ Les modules de haut niveau (comme le panier) ne doivent pas dépendre directemen
 ### Consignes de l'exercice :
 
 1. Créez une interface `Storable` qui représente le comportement attendu d'un stockage.
-2. Implémentez deux types de stockage : `LocalStorage` et `InMemoryStorage`.
+2. Implémentez une des deux classes (InMemoryStorage) pour l'instant, réfléchissez aux deux systèmes de stockage : `LocalStorage` et `InMemoryStorage` ( un array suffira ).
 3. Créez une classe `Product` avec un nom et un prix.
-4. Créez une classe `Cart` qui dépend d'un stockage via une abstraction (l'interface `Storage`).
+4. Créez une classe `Cart` qui dépend d'un stockage via une abstraction (l'interface `Storable`).
 5. Ajoutez des produits dans le panier et affichez le total des articles dans le panier.
