@@ -77,9 +77,9 @@ class UserService {
 ### Compléter les responsabilités ?? 
 
 Dans cet exemple, chaque classe a une responsabilité unique :
-- `User` ??
-- `UserRepository` ??
-- `UserService` ?? 
+- `User` gère les données d'un utilisateur.
+- `UserRepository` gère la persistance des utilisateurs.
+- `UserService` gère la logique métier liée aux utilisateurs.
 
 ---
 
@@ -163,96 +163,95 @@ Dans cet exemple, `Sparrow` peut remplacer `Bird` sans causer de problème au ni
 
 Voici un autre exemple du **principe de substitution de Liskov (LSP)**, avec uniquement des classes.
 
-### Contexte : Gestion de classes géométriques
-
-Nous avons une classe de base `Shape` (forme géométrique) et des sous-classes spécifiques `Rectangle` et `Square` (carré). 
-
-Les sous-classes doivent être substituables à la classe parent sans altérer le comportement attendu.
+### Contexte : Gestion de classes Product et Bike
 
 Quand on dit qu'une sous-classe est **substituable** à sa classe parent (comme le décrit le principe de substitution de Liskov - LSP), cela signifie que l'on doit pouvoir remplacer la classe parent par une sous-classe sans modifier le comportement du programme.
 
 ### Mauvais Exemple (pour contexte) :
 
 ```typescript
-class Rectangle {
-    constructor(protected width: number, protected height: number) {}
+class Product {
+    constructor(private _price: number, private _name: string) {}
 
-    setWidth(width: number) {
-        this.width = width;
+    // Getter pour le prix
+    get price(): number {
+        return this._price;
     }
 
-    setHeight(height: number) {
-        this.height = height;
+    // Setter pour le prix
+    set price(value: number) {
+        if (value <= 0) {
+            throw new Error("Le prix doit être supérieur à 0.");
+        }
+        this._price = value;
     }
 
-    getArea(): number {
-        return this.width * this.height;
+    // Getter pour le nom
+    get name(): string {
+        return this._name;
+    }
+
+    // Setter pour le nom
+    set name(value: string) {
+        if (!value) {
+            throw new Error("Le nom ne peut pas être vide.");
+        }
+        this._name = value;
+    }
+
+    promo(per : number):void{
+        this._price = this._price * (1 - per / 100)
     }
 }
 
-class Square extends Rectangle {
-    setWidth(width: number) {
-        this.width = width;
-        this.height = width; // Problème : hauteur change aussi
-    }
-
-    setHeight(height: number) {
-        this.height = height;
-        this.width = height; // Problème : largeur change aussi
+class Bike extends Product{
+    promo(per : number, coeff : number ):void{
+        this.price = this.price * (1 - per / 100)
     }
 }
 ```
 
-Le carré (`Square`) viole le principe de Liskov car il redéfinit les méthodes `setWidth` et `setHeight` de manière inattendue. Dans ce cas, `Square` ne peut pas remplacer `Rectangle` sans causer des incohérences.
+Le principe de Liskov stipule que les objets d'une classe dérivée doivent pouvoir être utilisés à la place des objets de la classe de base sans altérer le comportement attendu du programme.
 
-### Bon Exemple :
+Dans ta classe de **parent** Product, la méthode promo() prend un seul paramètre per (le pourcentage de réduction), tandis que dans la classe dérivée Bike, on modifie cette méthode pour qu'elle accepte deux paramètres : per et coeff de manière obligatoire. Cela change la signature de la méthode et introduit une incompatibilité.
 
-On peut repenser la structure pour que chaque classe fonctionne correctement avec le principe de substitution.
+**Problème spécifique**
+
+De manière générale vous allez avoir des problèmes dans votre code...Si une instance de Bike est utilisée là où une instance de Product est attendue, le code qui appelle la méthode promo() s'attendrait à un seul argument, mais Bike.promo() attend deux arguments, ce qui entraînerait des erreurs ou des comportements inattendus.
+
+### Deux solutions possibles 
+
+On peut repenser la structure pour que chaque classe fonctionne correctement avec le principe de substitution, deux approches sont possibles, soit respecter effectivement le nombre de paramètre de la méthode définit dans le parent, soit éventuellement ajouter un/des paramètre(s) facultatif(s)
+
+- Avec paramètre(s) facultatif(s) on ne brise pas le principe de LSP.
 
 ```typescript
-abstract class Shape {
-    getArea(): number {
-        throw new Error("Method not implemented.");
+
+class Bike extends Product {
+    // Ajout d'un paramètre facultatif coeff
+    promo(per: number, coeff?: number): void {
+        const effectiveCoeff = coeff ? coeff : 1; // Coeff par défaut est 1
+        this.price = this.price * (1 - per * effectiveCoeff / 100);
     }
 }
-
-class Rectangle extends Shape {
-    constructor(private width: number, private height: number) {
-        super();
-    }
-
-    getArea(): number {
-        return this.width * this.height;
-    }
-}
-
-class Square extends Shape {
-    constructor(private sideLength: number) {
-        super(sideLength, sideLength)
-    }
-
-    getArea(): number {
-        return this.sideLength * this.sideLength;
-    }
-}
-
-// Fonction qui utilise le principe de substitution
-function printArea(shape: Shape) {
-    console.log(`Area: ${shape.getArea()}`);
-}
-
-const rectangle = new Rectangle(10, 5);
-const square = new Square(7);
-
-printArea(rectangle); // Area: 50
-printArea(square);    // Area: 49
 ```
 
-### Explication :
+- On ne change pas le nombre de paramètre
 
-- `Shape` est la classe de base qui expose une méthode `getArea`, et les sous-classes `Rectangle` et `Square` la redéfinissent de manière appropriée pour calculer leur aire.
-- Ici, `Rectangle` et `Square` respectent le principe LSP car on peut substituer un objet `Rectangle` par un `Square` dans la fonction `printArea` sans aucun souci.
-- Chaque classe a un comportement attendu et n'introduit pas d'effets secondaires lorsqu'elle est substituée.
+```typescript
+
+class Bike extends Product {
+    // Ajout d'un paramètre facultatif coeff
+    promo(per: number): void {
+
+        const effectiveCoeff =  0.4; 
+        this.price = this.price * (1 - per * effectiveCoeff / 100);
+    }
+}
+```
+Dans la méthode promo() de Bike, le paramètre coeff est facultatif (coeff?: number). Si le paramètre coeff n'est pas fourni, la valeur par défaut de coeff sera 1, ce qui signifie que la réduction sera calculée de manière standard comme dans la classe Product.
+
+Ce code respecte le LSP car la signature de la méthode promo() dans Bike reste compatible avec celle de la classe Product : si on n'utilise pas le second paramètre, le comportement reste conforme à celui attendu dans Product.
 
 ---
 
