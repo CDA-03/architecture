@@ -93,7 +93,7 @@
    "scripts": {
      "build": "tsc",
      "start": "nodemon src/main.ts",
-      "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' src/main.ts",
+      "dev": "nodemon --watch ./**/*.ts --exec ts-node src/main.ts",
 
    }
    ```
