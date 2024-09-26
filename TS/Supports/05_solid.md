@@ -175,7 +175,7 @@ Quand on dit qu'une sous-classe est **substituable** à sa classe parent (comme 
 
 ```typescript
 class Rectangle {
-    constructor(public width: number, public height: number) {}
+    constructor(protected width: number, protected height: number) {}
 
     setWidth(width: number) {
         this.width = width;
@@ -217,7 +217,7 @@ abstract class Shape {
 }
 
 class Rectangle extends Shape {
-    constructor(public width: number, public height: number) {
+    constructor(private width: number, private height: number) {
         super();
     }
 
@@ -227,8 +227,8 @@ class Rectangle extends Shape {
 }
 
 class Square extends Shape {
-    constructor(public sideLength: number) {
-        super();
+    constructor(private sideLength: number) {
+        super(sideLength, sideLength)
     }
 
     getArea(): number {
