@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    container_name: solid-cart
+    ports:
+      - "3002:3002"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+
